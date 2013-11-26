@@ -11,7 +11,7 @@ module Cinch
       def initialize(*args)
         super
         if File.exist?('memos.yaml')
-          @memos = YAML.load_file('memos.yaml')
+          @memos = YAML.load_file('memos.yaml') || {}
         else
           @memos = {}
         end
@@ -36,7 +36,7 @@ module Cinch
           m.reply "You can't leave memos for yourself..."
         elsif nick == bot.nick
           m.reply "You can't leave memos for me..."
-        elsif @memos.key?(nick)
+        elsif @memos && @memos.key?(nick)
           msg = make_msg(m.user.nick, m.channel, message, Time.now)
           @memos[nick] << msg
           m.reply "Added memo for #{nick}"
